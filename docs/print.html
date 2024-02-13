@@ -3,7 +3,8 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - MEMOIR Developer Manual</title>
+        <title>MEMOIR Developer Manual</title>
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
@@ -90,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded "><a href="memoir/index.html"><strong aria-hidden="true">1.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/index.html"><strong aria-hidden="true">2.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">3.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="memoir/index.html"><strong aria-hidden="true">1.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/index.html"><strong aria-hidden="true">2.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="api/index.html"><strong aria-hidden="true">3.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -193,15 +194,17 @@ If you build upon or use MEMOIR we kindly ask that you cite that paper:</p>
     year={2024},
 }
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-1"><a class="header" href="#memoir-1">MEMOIR</a></h1>
+<h2 id="a-compiler-intermediate-representation-for-data-collections"><a class="header" href="#a-compiler-intermediate-representation-for-data-collections">A compiler intermediate representation for data collections</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="compiler"><a class="header" href="#compiler">Compiler</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="api"><a class="header" href="#api">API</a></h1>
+<h1 id="c"><a class="header" href="#c">C</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
 
-                            <a rel="next prefetch" href="memoir/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -210,29 +213,10 @@ If you build upon or use MEMOIR we kindly ask that you cite that paper:</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
 
-                    <a rel="next prefetch" href="memoir/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
         <script>
@@ -259,6 +243,13 @@ If you build upon or use MEMOIR we kindly ask that you cite that paper:</p>
 
         <!-- Custom JS scripts -->
 
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
 
     </div>
     </body>
