@@ -4,9 +4,9 @@ This is the developer manual for the MEMOIR compiler infrastructure.
 As the code repository is actively under development and subject to change so to is this documentation.
 
 This book is organized as follows:
-- [MEMOIR](memoir/README.md) : An overview of the MEMOIR intermediate representation.
-- [Compiler](compiler/README.md) : An overview of the compiler implementation.
-- [API](api/README.md) : An overview of the language APIs used to write MEMOIR programs.
+- [MEMOIR](memoir/overview.md) : An overview of the MEMOIR intermediate representation.
+- [Compiler](compiler/overview.md) : An overview of the compiler implementation.
+- [API](api/overview.md) : An overview of the language APIs used to write MEMOIR programs.
 
 In addition to this documentation, more information can be found in the [CGO'24 paper](http://mcmichen.cc/files/MEMOIR_CGO_2024.pdf).
 If you build upon or use MEMOIR we kindly ask that you cite that paper:
