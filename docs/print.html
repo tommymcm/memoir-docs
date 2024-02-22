@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">2.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">3.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">4.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -200,11 +200,264 @@ If you build upon or use MEMOIR we kindly ask that you cite that paper:</p>
 cd memoir
 make
 </code></pre>
+<p>Following installation, MEMOIR will be installed under <code>memoir/install</code>.
+Run <code>source enable</code> to add the MEMOIR toolchain to your <code>PATH</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="writing-a-program"><a class="header" href="#writing-a-program">Writing a Program</a></h1>
+<p>In this section, we will be going over a few example C++ programs using MEMOIR collections.</p>
+<h2 id="example-sequences"><a class="header" href="#example-sequences"><em>Example:</em> Sequences</a></h2>
+<p>Let's start on a basic statistics program.</p>
+<p>To get started, we need to include the <code>cmemoir</code> headers.</p>
+<pre><code class="language-cpp">#include &lt;cmemoir/cmemoir.h&gt;
+
+using namespace memoir;
+</code></pre>
+<p>Now, let's make our <code>main</code> function, where we will read the arguments into a MEMOIR sequence.</p>
+<p>To start off with, we need to allocate a sequence.
+Sequences can be allocated with the <code>memoir_allocate_sequence</code> function.
+The first argument to the function is the type of elements within the sequence and the second is the initial length of the sequence, for example:</p>
+<pre><code class="language-cpp">#include &lt;cmemoir/cmemoir.h&gt;
+
+using namespace memoir;
+
+int main(int argc, char *argv[]) {
+    collection_ref input = memoir_allocate_sequence(memoir_i32_t, argc - 1);
+}
+</code></pre>
+<p>Now let's populate the sequence!
+To write to the sequence, we use the function <code>memoir_index_write(T, v, s, i)</code>.
+<code>T</code> is the shorthand element type, <code>v</code> is the value to write to <code>s[i]</code>.
+With this, we can update our <code>main</code> function:</p>
+<pre><code class="language-cpp">#include &lt;cmemoir/cmemoir.h&gt;
+#include &lt;stdlib.h&gt;
+
+using namespace memoir;
+
+int main(int argc, char *argv[]) {
+    collection_ref input = memoir_allocate_sequence(memoir_i32_t, argc - 1);
+    
+    for (int i = 0; i &lt; argc - 1; ++i) {
+        memoir_index_write(i32, atoi(argv[i+1]), input, i);
+    }
+}
+</code></pre>
+<p>Let's go ahead and use the sequence for something now!
+To do that, we can create a new function to compute the sum of the sequence:</p>
+<pre><code class="language-cpp">int sum(collection_ref input) {
+    int32_t sum = 0;
+    for (int i = 0; i &lt; memoir_size(input); ++i) {
+        sum += memoir_index_read(i32, input, i);
+    }
+    return sum;
+}
+</code></pre>
+<p>In <code>sum</code> we use two new MEMOIR functions: <code>memoir_index_read</code> and <code>memoir_size</code>.
+<code>memoir_index_read(T, s, i)</code> reads <code>s[i]</code>, which has element type <code>T</code>.
+<code>memoir_size(s)</code> returns the size of the sequence as a <code>size_t</code>.</p>
+<p>Now we can call our <code>sum</code> function in <code>main</code>:</p>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+...
+int main(int argc, char *argv[]) {
+    collection_ref input = memoir_allocate_sequence(memoir_i32_t, argc - 1);
+    
+    for (int i = 0; i &lt; argc - 1; ++i) {
+        memoir_index_write(i32, atoi(argv[i+1]), input, i);
+    }
+    
+    int result = sum(input);
+    
+    printf("sum = %d\n", result);
+    
+    return 0;
+}
+</code></pre>
+<h2 id="example-associative-array"><a class="header" href="#example-associative-array"><em>Example:</em> Associative Array</a></h2>
+<p>Let's extend our statistics program to provide a histogram!</p>
+<p>First off, we will need to create a new associative array, which can be done with <code>memoir_allocate_assoc_array(K, V)</code>, where <code>K</code> is the key rtype and <code>V</code> is the value type:</p>
+<pre><code class="language-cpp">collection_ref hist(collection_ref input) {
+    collection_ref histogram = memoir_allocate_assoc_array(memoir_i32_t, memoir_u32_t);
+}
+</code></pre>
+<p>Following this, we need to populate it with values from the input sequence.</p>
+<pre><code class="language-cpp">collection_ref hist(collection_ref input) {
+    collection_ref histogram = memoir_allocate_assoc_array(memoir_i32_t, memoir_u32_t);
+    
+    for (int i = 0; i &lt; memoir_size(input); ++i) {
+        int32_t value = memoir_index_read(i32, input, i);
+        if (memoir_assoc_has(histogram, value)) {
+            uint32_t current = memoir_assoc_read(u32, histogram, value);
+            memoir_assoc_write(u32, current + 1, histogram, value);
+        } else {
+            memoir_assoc_insert(histogram, value);
+            memoir_assoc_write(u32, 1, histogram, value);
+        }
+    }
+    
+    return histogram;
+}
+</code></pre>
+<p>Note that we must explicitly insert keys into the associative array before writing to it, it is undefined behavior to write a value to a key which doesn't exist in the associative array.</p>
+<p>Now, let's use the new <code>hist</code> function and see how to iterate over it:</p>
+<pre><code class="language-cpp">int main(...) {
+    collection_ref input = ...;
+    
+    { ... }
+    
+    collection_ref histogram = hist(input);
+    
+    collection_ref keys = memoir_assoc_keys(histogram);
+    for (int i = 0; i &lt; memoir_size(keys); ++i) {
+        int32_t key = memoir_index_read(i32, keys, i);
+        uint32_t count = memoir_assoc_read(u32, histogram, key);
+        printf("%d -&gt; %ld\n", key, count);
+    }
+    
+    return 0;
+}
+</code></pre>
+<p>To iterate over the associative array, we need to collect its keys with the <code>memoir_keys</code> function.
+<code>memoir_assoc_keys(a)</code> returns a sequence of the keys present in <code>a</code>.
+Note that their is no guarantee on the order of keys in the resultant.</p>
+<h2 id="compiling-your-program"><a class="header" href="#compiling-your-program">Compiling your program</a></h2>
+<p>Compiling C/C++ programs using MEMOIR collections is straightforward.
+The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools provide similar functionality to <code>clang</code>/<code>clang++</code>.
+<em><strong>NOTE:</strong> These should not be considered drop-in replacements</em>.</p>
+<p>To compile the program you just wrote, simply run:</p>
+<pre><code>memoir-clang++ my_program.cpp -o my_program
+</code></pre>
+<p>The result of this command is <code>my_program</code> which can be executed, for example, if you run:</p>
+<pre><code>./my_program 123 123 321
+</code></pre>
+<p>The following will be printed on your command line:</p>
+<pre><code>sum = 567
+123 -&gt; 2
+321 -&gt; 1
+</code></pre>
+<p><strong>Congratulations!</strong> You have now written and ran your first program in <strong>MEMOIR!</strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="writing-a-pass"><a class="header" href="#writing-a-pass">Writing a Pass</a></h1>
+<p>In this section, we will be going over a few example MEMOIR passes, including analysis and transformation.</p>
+<p>MEMOIR is built atop the LLVM compiler infrastructure, we will assume <em>some</em> knowledge of writing LLVM passes.
+If you need more information about LLVM you can start with their <a href=https://llvm.org/docs/WritingAnLLVMPass.html target="_blank">writing an LLVM pass guide</a>.</p>
+<p>The following documentation assumes that you are building your MEMOIR pass in tree, i.e., within the repository using the same build system.</p>
+<h2 id="example-counting-memoir-instructions"><a class="header" href="#example-counting-memoir-instructions"><em>Example:</em> Counting MEMOIR Instructions</a></h2>
+<p>Let's start off with the simplest example, count MEMOIR instructions in a program.</p>
+<p>For this example, you will need to include the following header:</p>
+<pre><code class="language-cpp">#include &lt;memoir/ir/Instructions.hpp&gt;
+</code></pre>
+<p>This header includes the definition of MEMOIR instructions and methods to analyze them within an LLVM pass.</p>
+<p>Let's implement our <code>runOnModule</code> method:</p>
+<pre><code class="language-cpp">bool runOnModule(llvm::Module &amp;M) override {
+    // We will keep track of MEMOIR instructions with this:
+    uint32_t memoir_inst_count = 0;
+
+    // Analyze the program.
+    for (llvm::Function &amp;F : M) {
+        for (llvm::BasicBlock &amp;BB : F) {
+            for (llvm::Instruction &amp;I : BB) {
+                // Try to convert the LLVM Instruction to a MEMOIR Instruction.
+                // NOTE: as is equivalent to LLVM's dyn_cast
+                llvm::memoir::MemOIRInst *MI = as&lt;llvm::memoir::MemOIRInst&gt;(&amp;I);
+                
+                // If @MI is null, then @I is NOT a MEMOIR instruction.
+                if (MI == nullptr) {
+                    continue;
+                }
+                
+                // Otherwise, @I is a MEMOIR instruction! Let's count it:
+                ++memoir_inst_count;
+            }
+        }
+    }
+    
+    // Print the number of MEMOIR instructions that we found.
+    llvm::errs() &lt;&lt; memoir_inst_count &lt;&lt; "\n";
+    
+    // We did not modify the program, so we return false.
+    return false;
+}
+</code></pre>
+<p><strong>Congratulations!</strong> You wrote your first <strong>MEMOIR</strong> pass!</p>
+<h2 id="example-counting-types-of-memoir-instructions"><a class="header" href="#example-counting-types-of-memoir-instructions"><em>Example:</em> Counting Types of MEMOIR Instructions</a></h2>
+<p>So far our pass isn't much to write home about, but it's a great start!
+Let's kick it up a notch by updating the pass to count the <em>type</em> of MEMOIR instructions in our program.</p>
+<p>For this, we can use a visitor.
+Add the following includes to your program:</p>
+<pre><code class="language-cpp">#include &lt;memoir/ir/InstVisitor.hpp&gt;
+#include &lt;map&gt;
+</code></pre>
+<p>The MEMOIR <code>InstVisitor</code> gives us similar functionality to LLVM's <code>InstVisitor</code>, in fact, anything you can do in an LLVM <code>InstVisitor</code> can be done in MEMOIR's!
+We can start by definining out visitor class:</p>
+<pre><code class="language-cpp">class MyVisitor : public llvm::memoir::InstVisitor&lt;MyVisitor, void&gt; {
+    // In order for the wrapper to work, we need to declare our parent classes as friends.
+    friend class llvm::memoir::InstVisitor&lt;MyVisitor, void&gt;;
+    friend class llvm::InstVisitor&lt;MyVisitor, void&gt;;
+}
+</code></pre>
+<p>Great! Now that we have our boilerplate, let's fill it in:</p>
+<pre><code class="language-cpp">class MyVisitor : ... {
+    ...
+    
+public:
+
+    // We will store the results of our analysis here:
+    std::map&lt;std::string, uint32_t&gt; instruction_counts;
+
+    // We _always_ need to implement visitInstruction!
+    void visitInstruction(llvm::Instruction &amp;I) {
+        // Do nothing.
+        return;
+    }
+    
+    // Count all access instructions (read, write, get) together:
+    void visitAccessInst(llvm::memoir::AccessInst &amp;I) {
+        this-&gt;instruction_counts["access"]++;
+        return;
+    }
+    
+    // Let's do the same for allocation instructions:
+    void visitAllocInst(llvm::memoir::AllocInst &amp;I) {
+        this-&gt;instruction_counts["alloc"]++;
+        return;
+    }
+    
+    // Put everything else into an "other" bucket.
+    // NOTE: since visitAllocInst and visitAccessInst are 
+    //       implemented, visitMemOIRInst will _never_ be
+    //       passed an AllocInst nor an AccessInst.
+    void visitMemOIRInst(llvm::memoir::MemOIRInst &amp;I) {
+        this-&gt;instruction_counts["other"]++;
+        return;
+    }
+</code></pre>
+<p>Now we can use the visitor in our <code>runOnModule</code> pass:</p>
+<pre><code class="language-cpp">bool runOnModule(llvm::Module &amp;M) override {
+    // Initialize our visitor:
+    MyVisitor visitor;
+
+    // Analyze the program.
+    for (llvm::Function &amp;F : M) {
+        for (llvm::BasicBlock &amp;BB : F) {
+            for (llvm::Instruction &amp;I : BB) {
+                visitor.visit(I);
+            }
+        }
+    }
+    
+    // Print the results of our visitor:
+    for (const auto &amp;[type, count] : visitor.instruction_counts) {
+        llvm::errs() &lt;&lt; type &lt;&lt; " -&gt; " &lt;&lt; count &lt;&lt; "\n";
+    }
+    
+    // We did not modify the program, so we return false.
+    return false;
+}
+</code></pre>
+<p>Now this is starting to look like a compiler pass!
+As an exercise, try adding a couple more counters like <code>InsertInst</code> and <code>RemoveInst</code>!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-1"><a class="header" href="#memoir-1">MEMOIR</a></h1>
 <h2 id="a-compiler-intermediate-representation-for-data-collections"><a class="header" href="#a-compiler-intermediate-representation-for-data-collections">A compiler intermediate representation for data collections</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compiler"><a class="header" href="#compiler">Compiler</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api"><a class="header" href="#api">API</a></h1>
-<h1 id="c"><a class="header" href="#c">C</a></h1>
+<h2 id="cc"><a class="header" href="#cc">C/C++</a></h2>
 
                     </main>
 
