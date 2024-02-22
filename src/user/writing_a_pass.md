@@ -48,6 +48,10 @@ bool runOnModule(llvm::Module &M) override {
 }
 ```
 
+The main difference between this pass and your run-of-the-mill LLVM pass is the use of `llvm::memoir::MemOIRInst` _via_ the `as` function.
+`as` is identical to LLVM's `dyn_cast`, but is necessary when converting from an LLVM instruction to a MEMOIR instruction.
+For more information about MEMOIR instructions, see [instructions](/compiler/instructions.md).
+
 **Congratulations!** You wrote your first **MEMOIR** pass!
 
 
