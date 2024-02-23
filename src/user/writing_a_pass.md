@@ -27,7 +27,7 @@ bool runOnModule(llvm::Module &M) override {
             for (llvm::Instruction &I : BB) {
                 // Try to convert the LLVM Instruction to a MEMOIR Instruction.
                 // NOTE: as is equivalent to LLVM's dyn_cast
-                llvm::memoir::MemOIRInst *MI = as<llvm::memoir::MemOIRInst>(&I);
+                llvm::memoir::MemOIRInst *MI = dyn_cast_into<llvm::memoir::MemOIRInst>(&I);
                 
                 // If @MI is null, then @I is NOT a MEMOIR instruction.
                 if (MI == nullptr) {
@@ -49,7 +49,7 @@ bool runOnModule(llvm::Module &M) override {
 ```
 
 The main difference between this pass and your run-of-the-mill LLVM pass is the use of `llvm::memoir::MemOIRInst` _via_ the `as` function.
-`as` is identical to LLVM's `dyn_cast`, but is necessary when converting from an LLVM instruction to a MEMOIR instruction.
+`dyn_cast_into` is identical to LLVM's `dyn_cast`, but is necessary when converting from an LLVM instruction to a MEMOIR instruction and vice versa.
 For more information about MEMOIR instructions, see [instructions](/compiler/instructions.md).
 
 **Congratulations!** You wrote your first **MEMOIR** pass!

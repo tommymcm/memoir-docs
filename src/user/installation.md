@@ -8,4 +8,4 @@ make
 ```
 
 Following installation, MEMOIR will be installed under `memoir/install`.
-Run `source enable` to add the MEMOIR toolchain to your `PATH`.
+Run `source enable` in the `memoir/` directory to add the MEMOIR toolchain to your `PATH`.

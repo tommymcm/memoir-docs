@@ -1,9 +1,9 @@
 # Writing a Program
 
-In this section, we will be going over a few example C++ programs using MEMOIR collections.
+In this section, we will be going over a few example C++ programs using the `cmemoir` collections API.
 
 ## _Example:_ Sequences
-Let's start on a basic statistics program.
+Let's start with a basic statistics program.
 
 To get started, we need to include the `cmemoir` headers.
 ```cpp
@@ -50,11 +50,11 @@ Let's go ahead and use the sequence for something now!
 To do that, we can create a new function to compute the sum of the sequence:
 ```cpp
 int sum(collection_ref input) {
-    int32_t sum = 0;
+    int32_t result = 0;
     for (int i = 0; i < memoir_size(input); ++i) {
-        sum += memoir_index_read(i32, input, i);
+        result += memoir_index_read(i32, input, i);
     }
-    return sum;
+    return result;
 }
 ```
 In `sum` we use two new MEMOIR functions: `memoir_index_read` and `memoir_size`.
@@ -79,6 +79,28 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
+
+### Compiling your program
+Compiling C/C++ programs using MEMOIR collections is straightforward.
+The `memoir-clang` and `memoir-clang++` command-line tools provide similar functionality to `clang`/`clang++`.
+_**NOTE:** These should not be considered drop-in replacements_.
+
+To compile the program you just wrote, simply run:
+```
+memoir-clang++ my_program.cpp -o my_program
+```
+
+The result of this command is `my_program` which can be executed, for example, if you run:
+```
+./my_program 123 123 321
+```
+The following will be printed on your command line:
+```
+sum = 567
+```
+
+**Congratulations!** You have now written and ran your first program in **MEMOIR!**
+
 
 ## _Example:_ Associative Array
 Let's extend our statistics program to provide a histogram!
@@ -134,26 +156,17 @@ To iterate over the associative array, we need to collect its keys with the `mem
 `memoir_assoc_keys(a)` returns a sequence of the keys present in `a`.
 Note that their is no guarantee on the order of keys in the resultant.
 
-
-## Compiling your program
-Compiling C/C++ programs using MEMOIR collections is straightforward.
-The `memoir-clang` and `memoir-clang++` command-line tools provide similar functionality to `clang`/`clang++`.
-_**NOTE:** These should not be considered drop-in replacements_.
-
-To compile the program you just wrote, simply run:
+If we recompile our program:
 ```
 memoir-clang++ my_program.cpp -o my_program
 ```
-
-The result of this command is `my_program` which can be executed, for example, if you run:
+And run it:
 ```
 ./my_program 123 123 321
 ```
-The following will be printed on your command line:
+You should get the following result:
 ```
 sum = 567
 123 -> 2
 321 -> 1
 ```
-
-**Congratulations!** You have now written and ran your first program in **MEMOIR!**
