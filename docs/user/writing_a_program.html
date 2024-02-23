@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user/writing_a_program.html" class="active"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="../user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="../memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="../compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="../api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user/writing_a_program.html" class="active"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="../user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="../memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../memoir/instructions.html"><strong aria-hidden="true">4.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="../compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../compiler/instructions.html"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="../api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -176,9 +176,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="writing-a-program"><a class="header" href="#writing-a-program">Writing a Program</a></h1>
-<p>In this section, we will be going over a few example C++ programs using MEMOIR collections.</p>
+<p>In this section, we will be going over a few example C++ programs using the <code>cmemoir</code> collections API.</p>
 <h2 id="example-sequences"><a class="header" href="#example-sequences"><em>Example:</em> Sequences</a></h2>
-<p>Let's start on a basic statistics program.</p>
+<p>Let's start with a basic statistics program.</p>
 <p>To get started, we need to include the <code>cmemoir</code> headers.</p>
 <pre><code class="language-cpp">#include &lt;cmemoir/cmemoir.h&gt;
 
@@ -216,11 +216,11 @@ int main(int argc, char *argv[]) {
 <p>Let's go ahead and use the sequence for something now!
 To do that, we can create a new function to compute the sum of the sequence:</p>
 <pre><code class="language-cpp">int sum(collection_ref input) {
-    int32_t sum = 0;
+    int32_t result = 0;
     for (int i = 0; i &lt; memoir_size(input); ++i) {
-        sum += memoir_index_read(i32, input, i);
+        result += memoir_index_read(i32, input, i);
     }
-    return sum;
+    return result;
 }
 </code></pre>
 <p>In <code>sum</code> we use two new MEMOIR functions: <code>memoir_index_read</code> and <code>memoir_size</code>.
@@ -243,6 +243,20 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 </code></pre>
+<h3 id="compiling-your-program"><a class="header" href="#compiling-your-program">Compiling your program</a></h3>
+<p>Compiling C/C++ programs using MEMOIR collections is straightforward.
+The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools provide similar functionality to <code>clang</code>/<code>clang++</code>.
+<em><strong>NOTE:</strong> These should not be considered drop-in replacements</em>.</p>
+<p>To compile the program you just wrote, simply run:</p>
+<pre><code>memoir-clang++ my_program.cpp -o my_program
+</code></pre>
+<p>The result of this command is <code>my_program</code> which can be executed, for example, if you run:</p>
+<pre><code>./my_program 123 123 321
+</code></pre>
+<p>The following will be printed on your command line:</p>
+<pre><code>sum = 567
+</code></pre>
+<p><strong>Congratulations!</strong> You have now written and ran your first program in <strong>MEMOIR!</strong></p>
 <h2 id="example-associative-array"><a class="header" href="#example-associative-array"><em>Example:</em> Associative Array</a></h2>
 <p>Let's extend our statistics program to provide a histogram!</p>
 <p>First off, we will need to create a new associative array, which can be done with <code>memoir_allocate_assoc_array(K, V)</code>, where <code>K</code> is the key rtype and <code>V</code> is the value type:</p>
@@ -290,22 +304,17 @@ int main(int argc, char *argv[]) {
 <p>To iterate over the associative array, we need to collect its keys with the <code>memoir_keys</code> function.
 <code>memoir_assoc_keys(a)</code> returns a sequence of the keys present in <code>a</code>.
 Note that their is no guarantee on the order of keys in the resultant.</p>
-<h2 id="compiling-your-program"><a class="header" href="#compiling-your-program">Compiling your program</a></h2>
-<p>Compiling C/C++ programs using MEMOIR collections is straightforward.
-The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools provide similar functionality to <code>clang</code>/<code>clang++</code>.
-<em><strong>NOTE:</strong> These should not be considered drop-in replacements</em>.</p>
-<p>To compile the program you just wrote, simply run:</p>
+<p>If we recompile our program:</p>
 <pre><code>memoir-clang++ my_program.cpp -o my_program
 </code></pre>
-<p>The result of this command is <code>my_program</code> which can be executed, for example, if you run:</p>
+<p>And run it:</p>
 <pre><code>./my_program 123 123 321
 </code></pre>
-<p>The following will be printed on your command line:</p>
+<p>You should get the following result:</p>
 <pre><code>sum = 567
 123 -&gt; 2
 321 -&gt; 1
 </code></pre>
-<p><strong>Congratulations!</strong> You have now written and ran your first program in <strong>MEMOIR!</strong></p>
 
                     </main>
 
@@ -336,22 +345,6 @@ The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
         <script>

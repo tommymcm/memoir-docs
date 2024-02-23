@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memoir/instructions.html"><strong aria-hidden="true">4.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="compiler/instructions.html"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -201,11 +201,11 @@ cd memoir
 make
 </code></pre>
 <p>Following installation, MEMOIR will be installed under <code>memoir/install</code>.
-Run <code>source enable</code> to add the MEMOIR toolchain to your <code>PATH</code>.</p>
+Run <code>source enable</code> in the <code>memoir/</code> directory to add the MEMOIR toolchain to your <code>PATH</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="writing-a-program"><a class="header" href="#writing-a-program">Writing a Program</a></h1>
-<p>In this section, we will be going over a few example C++ programs using MEMOIR collections.</p>
+<p>In this section, we will be going over a few example C++ programs using the <code>cmemoir</code> collections API.</p>
 <h2 id="example-sequences"><a class="header" href="#example-sequences"><em>Example:</em> Sequences</a></h2>
-<p>Let's start on a basic statistics program.</p>
+<p>Let's start with a basic statistics program.</p>
 <p>To get started, we need to include the <code>cmemoir</code> headers.</p>
 <pre><code class="language-cpp">#include &lt;cmemoir/cmemoir.h&gt;
 
@@ -243,11 +243,11 @@ int main(int argc, char *argv[]) {
 <p>Let's go ahead and use the sequence for something now!
 To do that, we can create a new function to compute the sum of the sequence:</p>
 <pre><code class="language-cpp">int sum(collection_ref input) {
-    int32_t sum = 0;
+    int32_t result = 0;
     for (int i = 0; i &lt; memoir_size(input); ++i) {
-        sum += memoir_index_read(i32, input, i);
+        result += memoir_index_read(i32, input, i);
     }
-    return sum;
+    return result;
 }
 </code></pre>
 <p>In <code>sum</code> we use two new MEMOIR functions: <code>memoir_index_read</code> and <code>memoir_size</code>.
@@ -270,6 +270,20 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 </code></pre>
+<h3 id="compiling-your-program"><a class="header" href="#compiling-your-program">Compiling your program</a></h3>
+<p>Compiling C/C++ programs using MEMOIR collections is straightforward.
+The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools provide similar functionality to <code>clang</code>/<code>clang++</code>.
+<em><strong>NOTE:</strong> These should not be considered drop-in replacements</em>.</p>
+<p>To compile the program you just wrote, simply run:</p>
+<pre><code>memoir-clang++ my_program.cpp -o my_program
+</code></pre>
+<p>The result of this command is <code>my_program</code> which can be executed, for example, if you run:</p>
+<pre><code>./my_program 123 123 321
+</code></pre>
+<p>The following will be printed on your command line:</p>
+<pre><code>sum = 567
+</code></pre>
+<p><strong>Congratulations!</strong> You have now written and ran your first program in <strong>MEMOIR!</strong></p>
 <h2 id="example-associative-array"><a class="header" href="#example-associative-array"><em>Example:</em> Associative Array</a></h2>
 <p>Let's extend our statistics program to provide a histogram!</p>
 <p>First off, we will need to create a new associative array, which can be done with <code>memoir_allocate_assoc_array(K, V)</code>, where <code>K</code> is the key rtype and <code>V</code> is the value type:</p>
@@ -317,22 +331,17 @@ int main(int argc, char *argv[]) {
 <p>To iterate over the associative array, we need to collect its keys with the <code>memoir_keys</code> function.
 <code>memoir_assoc_keys(a)</code> returns a sequence of the keys present in <code>a</code>.
 Note that their is no guarantee on the order of keys in the resultant.</p>
-<h2 id="compiling-your-program"><a class="header" href="#compiling-your-program">Compiling your program</a></h2>
-<p>Compiling C/C++ programs using MEMOIR collections is straightforward.
-The <code>memoir-clang</code> and <code>memoir-clang++</code> command-line tools provide similar functionality to <code>clang</code>/<code>clang++</code>.
-<em><strong>NOTE:</strong> These should not be considered drop-in replacements</em>.</p>
-<p>To compile the program you just wrote, simply run:</p>
+<p>If we recompile our program:</p>
 <pre><code>memoir-clang++ my_program.cpp -o my_program
 </code></pre>
-<p>The result of this command is <code>my_program</code> which can be executed, for example, if you run:</p>
+<p>And run it:</p>
 <pre><code>./my_program 123 123 321
 </code></pre>
-<p>The following will be printed on your command line:</p>
+<p>You should get the following result:</p>
 <pre><code>sum = 567
 123 -&gt; 2
 321 -&gt; 1
 </code></pre>
-<p><strong>Congratulations!</strong> You have now written and ran your first program in <strong>MEMOIR!</strong></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="writing-a-pass"><a class="header" href="#writing-a-pass">Writing a Pass</a></h1>
 <p>In this section, we will be going over a few example MEMOIR passes, including analysis and transformation.</p>
 <p>MEMOIR is built atop the LLVM compiler infrastructure, we will assume <em>some</em> knowledge of writing LLVM passes.
@@ -355,7 +364,7 @@ If you need more information about LLVM you can start with their <a href=https:/
             for (llvm::Instruction &amp;I : BB) {
                 // Try to convert the LLVM Instruction to a MEMOIR Instruction.
                 // NOTE: as is equivalent to LLVM's dyn_cast
-                llvm::memoir::MemOIRInst *MI = as&lt;llvm::memoir::MemOIRInst&gt;(&amp;I);
+                llvm::memoir::MemOIRInst *MI = dyn_cast_into&lt;llvm::memoir::MemOIRInst&gt;(&amp;I);
                 
                 // If @MI is null, then @I is NOT a MEMOIR instruction.
                 if (MI == nullptr) {
@@ -375,6 +384,9 @@ If you need more information about LLVM you can start with their <a href=https:/
     return false;
 }
 </code></pre>
+<p>The main difference between this pass and your run-of-the-mill LLVM pass is the use of <code>llvm::memoir::MemOIRInst</code> <em>via</em> the <code>as</code> function.
+<code>dyn_cast_into</code> is identical to LLVM's <code>dyn_cast</code>, but is necessary when converting from an LLVM instruction to a MEMOIR instruction and vice versa.
+For more information about MEMOIR instructions, see <a href="user//compiler/instructions.html">instructions</a>.</p>
 <p><strong>Congratulations!</strong> You wrote your first <strong>MEMOIR</strong> pass!</p>
 <h2 id="example-counting-types-of-memoir-instructions"><a class="header" href="#example-counting-types-of-memoir-instructions"><em>Example:</em> Counting Types of MEMOIR Instructions</a></h2>
 <p>So far our pass isn't much to write home about, but it's a great start!
@@ -455,7 +467,44 @@ public:
 As an exercise, try adding a couple more counters like <code>InsertInst</code> and <code>RemoveInst</code>!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-1"><a class="header" href="#memoir-1">MEMOIR</a></h1>
 <h2 id="a-compiler-intermediate-representation-for-data-collections"><a class="header" href="#a-compiler-intermediate-representation-for-data-collections">A compiler intermediate representation for data collections</a></h2>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="instructions"><a class="header" href="#instructions">Instructions</a></h1>
+<p>MEMOIR instructions can be used similarly to LLVM instructions.</p>
+<h2 id="types"><a class="header" href="#types">Types</a></h2>
+<h3 id="primitive-types"><a class="header" href="#primitive-types">Primitive Types</a></h3>
+<p><code>u64, u32, u16, u8</code></p>
+<p><code>i64, i32, i16, i8</code></p>
+<h2 id="allocation"><a class="header" href="#allocation">Allocation</a></h2>
+<p><code>allocate_sequence(element_type, size)</code></p>
+<p><code>allocate_assoc_array(key_type, value_type)</code></p>
+<p><code>allocate_struct(type)</code></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compiler"><a class="header" href="#compiler">Compiler</a></h1>
+<p>In this chapter we will go over the structure of the MEMOIR compiler infrastructure.</p>
+<h2 id="llvm"><a class="header" href="#llvm">LLVM</a></h2>
+<p>MEMOIR is built using LLVM compiler infrastructure.
+For information about the LLVM IR, see the <a href="https://llvm.org/docs/LangRef.html">LLVM Language Reference Manual</a>.
+For information about how to use the LLVM compiler API, see the <a href="http://mcmichen.cc/llvm/9.0.1/">LLVM Doxygen</a>.</p>
+<h2 id="noelle"><a class="header" href="#noelle">NOELLE</a></h2>
+<p>The MEMOIR compiler infrastructure makes use of NOELLE abstractions and utilities.
+For information about NOELLE, see the <a href="http://mcmichen.cc/files/NOELLE_CGO_2022.pdf">NOELLE Paper</a>.
+For guides on how to use NOELLE, Simone Campanoni has put together YouTube videos explaining different NOELLE features, they can be found in his <a href="https://users.cs.northwestern.edu/~simonec/ATC.html">Advanced Topics in Compilers materials</a>.
+Lastly, for detailed information about the NOELLE source code, you can reference the <a href="https://github.com/arcana-lab/noelle">GitHub repository</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="instructions-1"><a class="header" href="#instructions-1">Instructions</a></h1>
+<p>MEMOIR instructions can be operated on within the compiler with the <code>MemOIRInst</code> class.
+In this section, we will detail what you are provided with in <code>MemOIRInst</code> and how to obtain them from within the LLVM compiler infrastructure.</p>
+<h2 id="bitcode-representation"><a class="header" href="#bitcode-representation">Bitcode Representation</a></h2>
+<p>All MEMOIR instructions are implemented as <em>quasi-intrinsics</em>, this allows us to extend the LLVM compiler without having to make changes to its internals.
+There are various benefits and drawbacks to this approach, but that will not be the focus of this section.
+When inspecting a LLVM+MEMOIR bitcode, you can easily spot MEMOIR instructions by their function prefix <code>memoir__&lt;INSTRUCTION&gt;</code>.</p>
+<h2 id="dynamic-casting"><a class="header" href="#dynamic-casting">Dynamic Casting</a></h2>
+<p>To retrieve a <code>MemOIRInst</code> from an <code>llvm::Instruction</code>, use the <code>as</code> function:</p>
+<pre><code class="language-cpp">llvm::Instruction *llvm_inst = ...;
+MemOIRInst *memoir_inst = as&lt;MemOIRInst&gt;(llvm_inst);
+</code></pre>
+<p>This behaves similarly to LLVM's <code>dyn_cast</code>.</p>
+<p>When you have <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
+An overview of the subclasses are below.
+For more information, see <code>memoir/ir/Instructions.hpp</code> in your install directory <em>or</em> under the top-level <code>compiler/</code> directory of the repository.</p>
+<h2 id="additional-information"><a class="header" href="#additional-information">Additional Information</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api"><a class="header" href="#api">API</a></h1>
 <h2 id="cc"><a class="header" href="#cc">C/C++</a></h2>
 
@@ -476,22 +525,6 @@ As an exercise, try adding a couple more counters like <code>InsertInst</code> a
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
         <script>
