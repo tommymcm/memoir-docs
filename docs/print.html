@@ -195,7 +195,15 @@ If you build upon or use MEMOIR we kindly ask that you cite that paper:</p>
 }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
-<h4 id="unix"><a class="header" href="#unix">Unix</a></h4>
+<h4 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h4>
+<p>MEMOIR relies on LLVM 9.0.0
+If you do not already have it installed and on your <code>PATH</code> do the following:</p>
+<pre><code>curl -sL https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-pc-linux-gnu.tar.xz | tar xJ
+mv clang+llvm-9.0.0-x86_64-pc-linux-gnu llvm-9.0.0
+export PATH=$(realpath ./llvm-9.0.0):$PATH
+</code></pre>
+<p>If you want LLVM 9.0.0 to always be on your <code>PATH</code>, add it to your <code>~/.bashrc</code>.</p>
+<h4 id="memoir-1"><a class="header" href="#memoir-1">MEMOIR</a></h4>
 <pre><code>git clone git@github.com:arcana-lab/memoir.git
 cd memoir
 make
@@ -465,7 +473,7 @@ public:
 </code></pre>
 <p>Now this is starting to look like a compiler pass!
 As an exercise, try adding a couple more counters like <code>InsertInst</code> and <code>RemoveInst</code>!</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-1"><a class="header" href="#memoir-1">MEMOIR</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-2"><a class="header" href="#memoir-2">MEMOIR</a></h1>
 <h2 id="a-compiler-intermediate-representation-for-data-collections"><a class="header" href="#a-compiler-intermediate-representation-for-data-collections">A compiler intermediate representation for data collections</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="instructions"><a class="header" href="#instructions">Instructions</a></h1>
 <p>MEMOIR instructions can be used similarly to LLVM instructions.</p>
@@ -496,11 +504,12 @@ In this section, we will detail what you are provided with in <code>MemOIRInst</
 There are various benefits and drawbacks to this approach, but that will not be the focus of this section.
 When inspecting a LLVM+MEMOIR bitcode, you can easily spot MEMOIR instructions by their function prefix <code>memoir__&lt;INSTRUCTION&gt;</code>.</p>
 <h2 id="dynamic-casting"><a class="header" href="#dynamic-casting">Dynamic Casting</a></h2>
-<p>To retrieve a <code>MemOIRInst</code> from an <code>llvm::Instruction</code>, use the <code>as</code> function:</p>
+<p>To retrieve a <code>MemOIRInst</code> from an <code>llvm::Instruction</code>, use the <code>into</code> function:</p>
 <pre><code class="language-cpp">llvm::Instruction *llvm_inst = ...;
-MemOIRInst *memoir_inst = as&lt;MemOIRInst&gt;(llvm_inst);
+MemOIRInst *memoir_inst = into&lt;MemOIRInst&gt;(llvm_inst);
 </code></pre>
-<p>This behaves similarly to LLVM's <code>dyn_cast</code>.</p>
+<p>This behaves similarly to LLVM's <code>dyn_cast</code>, attempting to cast the <code>llvm_inst</code> to <code>MemOIRInst</code>, returning <code>NULL</code> on failure.
+The primary difference between the two is that, while <code>(void *)dyn_cast&lt;T&gt;(i) == (void *)i</code>, <code>(void *)into&lt;T&gt;(i) != (void *)i</code>.</p>
 <p>When you have <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
 An overview of the subclasses are below.
 For more information, see <code>memoir/ir/Instructions.hpp</code> in your install directory <em>or</em> under the top-level <code>compiler/</code> directory of the repository.</p>

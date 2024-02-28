@@ -183,11 +183,12 @@ In this section, we will detail what you are provided with in <code>MemOIRInst</
 There are various benefits and drawbacks to this approach, but that will not be the focus of this section.
 When inspecting a LLVM+MEMOIR bitcode, you can easily spot MEMOIR instructions by their function prefix <code>memoir__&lt;INSTRUCTION&gt;</code>.</p>
 <h2 id="dynamic-casting"><a class="header" href="#dynamic-casting">Dynamic Casting</a></h2>
-<p>To retrieve a <code>MemOIRInst</code> from an <code>llvm::Instruction</code>, use the <code>as</code> function:</p>
+<p>To retrieve a <code>MemOIRInst</code> from an <code>llvm::Instruction</code>, use the <code>into</code> function:</p>
 <pre><code class="language-cpp">llvm::Instruction *llvm_inst = ...;
-MemOIRInst *memoir_inst = as&lt;MemOIRInst&gt;(llvm_inst);
+MemOIRInst *memoir_inst = into&lt;MemOIRInst&gt;(llvm_inst);
 </code></pre>
-<p>This behaves similarly to LLVM's <code>dyn_cast</code>.</p>
+<p>This behaves similarly to LLVM's <code>dyn_cast</code>, attempting to cast the <code>llvm_inst</code> to <code>MemOIRInst</code>, returning <code>NULL</code> on failure.
+The primary difference between the two is that, while <code>(void *)dyn_cast&lt;T&gt;(i) == (void *)i</code>, <code>(void *)into&lt;T&gt;(i) != (void *)i</code>.</p>
 <p>When you have <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
 An overview of the subclasses are below.
 For more information, see <code>memoir/ir/Instructions.hpp</code> in your install directory <em>or</em> under the top-level <code>compiler/</code> directory of the repository.</p>
