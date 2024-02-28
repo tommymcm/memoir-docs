@@ -8,12 +8,13 @@ There are various benefits and drawbacks to this approach, but that will not be 
 When inspecting a LLVM+MEMOIR bitcode, you can easily spot MEMOIR instructions by their function prefix `memoir__<INSTRUCTION>`.
 
 ## Dynamic Casting
-To retrieve a `MemOIRInst` from an `llvm::Instruction`, use the `as` function:
+To retrieve a `MemOIRInst` from an `llvm::Instruction`, use the `into` function:
 ```cpp
 llvm::Instruction *llvm_inst = ...;
-MemOIRInst *memoir_inst = as<MemOIRInst>(llvm_inst);
+MemOIRInst *memoir_inst = into<MemOIRInst>(llvm_inst);
 ```
-This behaves similarly to LLVM's `dyn_cast`.
+This behaves similarly to LLVM's `dyn_cast`, attempting to cast the `llvm_inst` to `MemOIRInst`, returning `NULL` on failure.
+The primary difference between the two is that, while `(void *)dyn_cast<T>(i) == (void *)i`, `(void *)into<T>(i) != (void *)i`.
 
 When you have `MemOIRInst` the LLVM RTTI functions `isa`, `dyn_cast`, `cast`, etc. can be used to convert between subclasses of `MemOIRInst`.
 An overview of the subclasses are below.
