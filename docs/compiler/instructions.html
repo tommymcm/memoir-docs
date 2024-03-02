@@ -90,7 +90,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="../user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="../memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../memoir/instructions.html"><strong aria-hidden="true">4.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="../compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../compiler/instructions.html" class="active"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="../api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="../user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="../user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="../memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="../compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../compiler/instructions.html" class="active"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="../api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -189,10 +189,11 @@ MemOIRInst *memoir_inst = into&lt;MemOIRInst&gt;(llvm_inst);
 </code></pre>
 <p>This behaves similarly to LLVM's <code>dyn_cast</code>, attempting to cast the <code>llvm_inst</code> to <code>MemOIRInst</code>, returning <code>NULL</code> on failure.
 The primary difference between the two is that, while <code>(void *)dyn_cast&lt;T&gt;(i) == (void *)i</code>, <code>(void *)into&lt;T&gt;(i) != (void *)i</code>.</p>
-<p>When you have <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
+<p>When you have a <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
 An overview of the subclasses are below.
 For more information, see <code>memoir/ir/Instructions.hpp</code> in your install directory <em>or</em> under the top-level <code>compiler/</code> directory of the repository.</p>
 <h2 id="additional-information"><a class="header" href="#additional-information">Additional Information</a></h2>
+<p>For more information, see the <a href="https://mcmichen.cc/memoir-docs/doxygen">Doxygen</a>.</p>
 
                     </main>
 

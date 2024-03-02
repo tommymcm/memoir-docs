@@ -91,7 +91,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="memoir/instructions.html"><strong aria-hidden="true">4.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="compiler/instructions.html"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">User Guide</li><li class="chapter-item expanded "><a href="user/installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="user/writing_a_program.html"><strong aria-hidden="true">2.</strong> Writing a Program</a></li><li class="chapter-item expanded "><a href="user/writing_a_pass.html"><strong aria-hidden="true">3.</strong> Writing a Pass</a></li><li class="chapter-item expanded affix "><li class="part-title">Reference Guide</li><li class="chapter-item expanded "><a href="memoir/overview.html"><strong aria-hidden="true">4.</strong> MEMOIR</a></li><li class="chapter-item expanded "><a href="compiler/overview.html"><strong aria-hidden="true">5.</strong> Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="compiler/instructions.html"><strong aria-hidden="true">5.1.</strong> Instructions</a></li></ol></li><li class="chapter-item expanded "><a href="api/overview.html"><strong aria-hidden="true">6.</strong> API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -475,16 +475,7 @@ public:
 As an exercise, try adding a couple more counters like <code>InsertInst</code> and <code>RemoveInst</code>!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="memoir-2"><a class="header" href="#memoir-2">MEMOIR</a></h1>
 <h2 id="a-compiler-intermediate-representation-for-data-collections"><a class="header" href="#a-compiler-intermediate-representation-for-data-collections">A compiler intermediate representation for data collections</a></h2>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="instructions"><a class="header" href="#instructions">Instructions</a></h1>
-<p>MEMOIR instructions can be used similarly to LLVM instructions.</p>
-<h2 id="types"><a class="header" href="#types">Types</a></h2>
-<h3 id="primitive-types"><a class="header" href="#primitive-types">Primitive Types</a></h3>
-<p><code>u64, u32, u16, u8</code></p>
-<p><code>i64, i32, i16, i8</code></p>
-<h2 id="allocation"><a class="header" href="#allocation">Allocation</a></h2>
-<p><code>allocate_sequence(element_type, size)</code></p>
-<p><code>allocate_assoc_array(key_type, value_type)</code></p>
-<p><code>allocate_struct(type)</code></p>
+<p>This chapter is currently under construction, see the <a href="http://mcmichen.cc/files/MEMOIR_CGO_2024.pdf">CGO'24 paper</a> for information about MEMOIR.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="compiler"><a class="header" href="#compiler">Compiler</a></h1>
 <p>In this chapter we will go over the structure of the MEMOIR compiler infrastructure.</p>
 <h2 id="llvm"><a class="header" href="#llvm">LLVM</a></h2>
@@ -496,7 +487,7 @@ For information about how to use the LLVM compiler API, see the <a href="http://
 For information about NOELLE, see the <a href="http://mcmichen.cc/files/NOELLE_CGO_2022.pdf">NOELLE Paper</a>.
 For guides on how to use NOELLE, Simone Campanoni has put together YouTube videos explaining different NOELLE features, they can be found in his <a href="https://users.cs.northwestern.edu/~simonec/ATC.html">Advanced Topics in Compilers materials</a>.
 Lastly, for detailed information about the NOELLE source code, you can reference the <a href="https://github.com/arcana-lab/noelle">GitHub repository</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="instructions-1"><a class="header" href="#instructions-1">Instructions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="instructions"><a class="header" href="#instructions">Instructions</a></h1>
 <p>MEMOIR instructions can be operated on within the compiler with the <code>MemOIRInst</code> class.
 In this section, we will detail what you are provided with in <code>MemOIRInst</code> and how to obtain them from within the LLVM compiler infrastructure.</p>
 <h2 id="bitcode-representation"><a class="header" href="#bitcode-representation">Bitcode Representation</a></h2>
@@ -510,12 +501,15 @@ MemOIRInst *memoir_inst = into&lt;MemOIRInst&gt;(llvm_inst);
 </code></pre>
 <p>This behaves similarly to LLVM's <code>dyn_cast</code>, attempting to cast the <code>llvm_inst</code> to <code>MemOIRInst</code>, returning <code>NULL</code> on failure.
 The primary difference between the two is that, while <code>(void *)dyn_cast&lt;T&gt;(i) == (void *)i</code>, <code>(void *)into&lt;T&gt;(i) != (void *)i</code>.</p>
-<p>When you have <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
+<p>When you have a <code>MemOIRInst</code> the LLVM RTTI functions <code>isa</code>, <code>dyn_cast</code>, <code>cast</code>, etc. can be used to convert between subclasses of <code>MemOIRInst</code>.
 An overview of the subclasses are below.
 For more information, see <code>memoir/ir/Instructions.hpp</code> in your install directory <em>or</em> under the top-level <code>compiler/</code> directory of the repository.</p>
 <h2 id="additional-information"><a class="header" href="#additional-information">Additional Information</a></h2>
+<p>For more information, see the <a href="https://mcmichen.cc/memoir-docs/doxygen">Doxygen</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api"><a class="header" href="#api">API</a></h1>
-<h2 id="cc"><a class="header" href="#cc">C/C++</a></h2>
+<h2 id="cmemoir"><a class="header" href="#cmemoir"><code>cmemoir</code></a></h2>
+<p>The <code>cmemoir</code> library provides a simple interface for MEMOIR collections.
+See <code>runtime/api/c/cmemoir.h</code> for more detailed information.</p>
 
                     </main>
 
