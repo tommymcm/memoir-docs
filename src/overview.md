@@ -8,6 +8,10 @@ This book is organized as follows:
 - [Compiler](compiler/overview.md) : An overview of the compiler implementation.
 - [API](api/overview.md) : An overview of the language APIs used to write MEMOIR programs.
 
+#### Doxygen
+The [Doxygen](https://mcmichen.cc/memoir-doxygen) is available for detailed documentation of the MEMOIR compiler.
+
+#### Publications
 In addition to this documentation, more information can be found in the [CGO'24 paper](http://mcmichen.cc/files/MEMOIR_CGO_2024.pdf).
 If you build upon or use MEMOIR we kindly ask that you cite that paper:
 ```

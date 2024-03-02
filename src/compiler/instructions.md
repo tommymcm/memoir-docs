@@ -21,4 +21,4 @@ An overview of the subclasses are below.
 For more information, see `memoir/ir/Instructions.hpp` in your install directory _or_ under the top-level `compiler/` directory of the repository.
 
 ## Additional Information
-For more information, see the [Doxygen](https://mcmichen.cc/memoir-docs/doxygen).
+For more information, see the [Doxygen](https://mcmichen.cc/memoir-doxygen/structllvm_1_1memoir_1_1MemOIRInst.html).
