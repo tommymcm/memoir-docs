@@ -8,7 +8,6 @@
 
 # Reference Guide
 - [MEMOIR](memoir/overview.md)
-  - [Instructions](memoir/instructions.md)
 - [Compiler](compiler/overview.md)
   - [Instructions](compiler/instructions.md)
 - [API](api/overview.md)

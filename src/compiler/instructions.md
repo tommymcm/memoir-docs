@@ -16,8 +16,9 @@ MemOIRInst *memoir_inst = into<MemOIRInst>(llvm_inst);
 This behaves similarly to LLVM's `dyn_cast`, attempting to cast the `llvm_inst` to `MemOIRInst`, returning `NULL` on failure.
 The primary difference between the two is that, while `(void *)dyn_cast<T>(i) == (void *)i`, `(void *)into<T>(i) != (void *)i`.
 
-When you have `MemOIRInst` the LLVM RTTI functions `isa`, `dyn_cast`, `cast`, etc. can be used to convert between subclasses of `MemOIRInst`.
+When you have a `MemOIRInst` the LLVM RTTI functions `isa`, `dyn_cast`, `cast`, etc. can be used to convert between subclasses of `MemOIRInst`.
 An overview of the subclasses are below.
 For more information, see `memoir/ir/Instructions.hpp` in your install directory _or_ under the top-level `compiler/` directory of the repository.
 
 ## Additional Information
+For more information, see the [Doxygen](https://mcmichen.cc/memoir-docs/doxygen).
