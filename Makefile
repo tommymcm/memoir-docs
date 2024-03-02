@@ -4,7 +4,4 @@ all:
 serve:
 	mdbook serve --open
 
-clean:
-	rm -rf docs/
-
 .PHONY: all
