@@ -4,7 +4,7 @@ In this section, we will be going over a few example MEMOIR passes, including an
 MEMOIR is built atop the LLVM compiler infrastructure, we will assume _some_ knowledge of writing LLVM passes.
 If you need more information about LLVM you can start with their <a href=https://llvm.org/docs/WritingAnLLVMPass.html target="_blank">writing an LLVM pass guide</a>.
 
-The following documentation assumes that you are building your MEMOIR pass in tree, i.e., within the repository using the same build system.
+Additionally, MEMOIR makes use of NOELLE abstractions, for more information about NOELLE, <a href=https://github.com/arcana-lab/noelle target="_blank">see their repository</a>.
 
 ## _Example:_ Counting MEMOIR Instructions
 Let's start off with the simplest example, count MEMOIR instructions in a program.
