@@ -7,9 +7,6 @@ language = "en"
 [rust]
 edition = "2021"
 
-[build]
-build-dir = "docs"
-
 [output.html]
 mathjax-support = true
 
