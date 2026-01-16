@@ -25,3 +25,38 @@ heading-split-level = 2
 
 [output.html.redirect]
 "/format/config.html" = "configuration/index.html"
+
+# Srcery-inspired colors
+[output.html.theme]
+fg = "#FCE8C3"              # Bright cream (srcery fg)
+bg = "#1C1B19"              # Dark background
+sidebar-bg = "#1C1B19"      # Dark background
+sidebar-fg = "#BAA67F"      # Muted cream
+sidebar-non-existant = "#877462"  # Dimmer brown
+sidebar-active = "#FBB829"  # Bright yellow
+sidebar-spacer = "#2D2C29"  # Slightly lighter dark
+
+scrollbar = "#3C3B37"       # Dark grey
+icons = "#BAA67F"           # Muted cream
+icons-hover = "#FBB829"     # Bright yellow
+
+links = "#0AAEB3"           # Cyan
+inline-code-color = "#FBB829"  # Bright yellow
+
+theme-popup-bg = "#2D2C29"  # Dark grey
+theme-popup-border = "#3C3B37"
+theme-hover = "#3C3B37"
+
+quote-bg = "#2D2C29"
+quote-border = "#519F50"    # Green accent
+
+table-border-color = "#3C3B37"
+table-header-bg = "#2D2C29"
+table-alternate-bg = "#252320"
+
+searchbar-border-color = "#3C3B37"
+searchbar-bg = "#2D2C29"
+searchbar-fg = "#FCE8C3"
+searchbar-shadow-color = "#000000"
+
+warning-border = "#FF5C00"  # Bright orange
