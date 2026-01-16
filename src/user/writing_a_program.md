@@ -7,7 +7,7 @@ Let's start with a basic statistics program.
 
 To get started, we need to include the `cmemoir` headers.
 ```cpp
-#include <cmemoir/cmemoir.h>
+#include <memoir/c/cmemoir.h>
 
 using namespace memoir;
 ```
@@ -18,7 +18,7 @@ To start off with, we need to allocate a sequence.
 Sequences can be allocated with the `memoir_allocate_sequence` function.
 The first argument to the function is the type of elements within the sequence and the second is the initial length of the sequence, for example:
 ```cpp
-#include <cmemoir/cmemoir.h>
+#include <memoir/c/cmemoir.h>
 
 using namespace memoir;
 
@@ -32,7 +32,7 @@ To write to the sequence, we use the function `memoir_index_write(T, v, s, i)`.
 `T` is the shorthand element type, `v` is the value to write to `s[i]`.
 With this, we can update our `main` function:
 ```cpp
-#include <cmemoir/cmemoir.h>
+#include <memoir/c/cmemoir.h>
 #include <stdlib.h>
 
 using namespace memoir;
